@@ -1,0 +1,9 @@
+% rebase('base.tpl', title='Page Title A')
+こんにちは。<b>{{name}}</b>さん。<br />
+<br />
+{{count}}回ループするよ<br />
+<br />
+
+% for i in xrange(count):
+{{i}}回<br />
+% end
