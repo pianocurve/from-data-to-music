@@ -5,7 +5,7 @@ import logging
 # import the Bottle framework
 
 
-from bottle import Bottle, template,debug,view
+from bottle import Bottle, debug, template,view,static_file
 
 # Create the Bottle WSGI application.
 bottle = Bottle()
@@ -14,10 +14,30 @@ bottle = Bottle()
 debug(True)
 
 # Define an handler for the root URL of our application.
+@bottle.route('/')
+@view("index")
+#def index():
+#    return template('index')
+
+
 @bottle.route('/<name>/<count:int>')
 @view("hello_template")
 def hello(name, count):
     return dict(name=name, count=count)
+
+#
+@bottle.route('/images/<filename:path>')
+def images(filename):
+    return static_file(filename, root="./images")
+
+@bottle.route('/js/<filename:path>')
+def js(filename):
+    return static_file(filename, root="./js")
+
+@bottle.route('/css/<filename:path>')
+def css(filename):
+    return static_file(filename, root="./css")
+
 
 
 

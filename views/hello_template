@@ -1,4 +1,6 @@
 % rebase('base.tpl', title='Page Title A')
+
+<img src="/images/3.png" />
 こんにちは。<b>{{name}}</b>さん。<br />
 <br />
 {{count}}回ループするよ<br />
