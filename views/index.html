@@ -7,8 +7,18 @@
   <script src="/js/midi.js"></script>
   <script >
   $(document).ready( function() {
+      //$("#note_list").load('/data/data.html')
+
+      $.getJSON("js/data.json", function(data){
+
+          $("#note_list").text(data.aaa.count);
+
+      })
+
       $("#button1").click(function(){
-          sendMiddleC(0);
+          //sendMiddleC(0);
+          noteOut(0,62,100,500);
+          noteOut(0,67,100,1000);
       });
   });
   </script>
@@ -18,5 +28,7 @@
 <body>
   <h1>Web midi test</h1>
   <input id="button1" type="button" value="on">
+  <div id="note_list"></div>
+
 </body>
 </html>

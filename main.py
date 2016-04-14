@@ -15,15 +15,14 @@ debug(True)
 
 # Define an handler for the root URL of our application.
 @bottle.route('/')
-@view("index")
-#def index():
-#    return template('index')
+def index():
+   return template('index')
 
 
-@bottle.route('/<name>/<count:int>')
-@view("hello_template")
-def hello(name, count):
-    return dict(name=name, count=count)
+# @bottle.route('/<name>/<count:int>')
+# @view("hello_template")
+# def hello(name, count):
+#     return dict(name=name, count=count)
 
 #
 @bottle.route('/images/<filename:path>')
@@ -37,6 +36,10 @@ def js(filename):
 @bottle.route('/css/<filename:path>')
 def css(filename):
     return static_file(filename, root="./css")
+
+@bottle.route('/data/<filename:path>')
+def data(filename):
+    return static_file(filename, root="./data")
 
 
 

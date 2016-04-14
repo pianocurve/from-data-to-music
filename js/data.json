@@ -1,0 +1,21 @@
+{
+	"aaa":{
+		"count":123,
+		"name":"テスト１",
+		"result":false
+	},
+	"bbb":{
+		"count":456,
+		"name":"テスト２",
+		"result":true
+	},
+	"ccc":{
+		"count":789,
+		"name":"テスト３",
+		"param":{
+			"ary":["a","b","c"],
+			"name":"テスト４"
+		},
+		"result":true
+	}
+}

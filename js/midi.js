@@ -35,6 +35,7 @@ function sendMIDINoteOn(note){
     outputs[0].send([0x90,note,0x7f]);
   }
 }
+
 function sendMiddleC( portID ) {
   var noteOnMessage = [0x90, 60, 0x7f];    // note on, middle C, full velocity
   outputs[portID].send(noteOnMessage);
@@ -43,4 +44,11 @@ function sendMiddleC( portID ) {
   //output.send( noteOnMessage );  //omitting the timestamp means send immediately.
   //output.send( [0x80, 60, 0x40], window.performance.now() + 1000.0 ); // インライン配列作成 - ノートオフ, 中央C,
                                                                       // リリースベロシティ = 64, タイムスタンプ = now + 1000ms.
+}
+
+function noteOut( portID, note, velocity, duration ) {
+
+  var noteOnMessage = [0x90, note, '0x' + velocity.toString(16)];    // note on, middle C, full velocity
+  outputs[portID].send(noteOnMessage);
+  outputs[portID].send( [0x80, note, 0x40], window.performance.now() + duration ); // インライン配列作成 - ノートオフ, 中央C,
 }
