@@ -1,0 +1,40 @@
+{
+	"heartbeat":60,
+	"config":{
+		"config_id":1,
+		"playingtime":23040,
+		"loop":true,
+	},
+	"tempo":{
+		"tempo_id":1,
+		"formula":"t=1",
+	},
+	"rhythm":{
+		"rhythm_id":1,
+		"formula":{
+			"ary":[8,4,4,8,8],
+		},
+
+	},
+	"pitch":{
+		"pitch_id":1,
+		"formula":"60",
+	},
+	"sequencer":{
+		"group":{
+			"no":1,
+
+		},
+	}
+
+	},
+	"ccc":{
+		"count":789,
+		"name":"テスト３",
+		"param":{
+			"ary":["a","b","c"],
+			"name":"テスト４"
+		},
+		"result":true
+	}
+}

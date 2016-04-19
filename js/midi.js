@@ -37,9 +37,18 @@ function sendMIDINoteOn(note){
 }
 
 function sendMiddleC( portID ) {
+
+  // Arrayを指定
+  var arr = new Uint8Array([0x90, 60, 0x7f,0x90, 65, 0x7f]);
+  var arr2 = new Uint8Array([0x80, 60, 0x40,0x80, 65, 0x40]);
+
   var noteOnMessage = [0x90, 60, 0x7f];    // note on, middle C, full velocity
-  outputs[portID].send(noteOnMessage);
-  outputs[portID].send( [0x80, 60, 0x40], window.performance.now() + 1000.0 ); // インライン配列作成 - ノートオフ, 中央C,
+
+  outputs[portID].send(arr);
+  outputs[portID].send( arr2, window.performance.now() + 1000.0 ); // インライン配列作成 - ノートオフ, 中央C,
+
+  //outputs[portID].send(noteOnMessage);
+  //outputs[portID].send( [0x80, 60, 0x40], window.performance.now() + 1000.0 ); // インライン配列作成 - ノートオフ, 中央C,
 
   //output.send( noteOnMessage );  //omitting the timestamp means send immediately.
   //output.send( [0x80, 60, 0x40], window.performance.now() + 1000.0 ); // インライン配列作成 - ノートオフ, 中央C,

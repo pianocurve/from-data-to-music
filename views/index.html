@@ -6,17 +6,78 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
   <script src="/js/midi.js"></script>
   <script >
-  $(document).ready( function() {
-      //$("#note_list").load('/data/data.html')
 
-      $.getJSON("js/data.json", function(data){
+  $(function() {
+      var seq; //json data
+      var seqno=0;
 
-          $("#note_list").text(data.aaa.count);
+      //シーケンスデータ読み込み
+      $("#button_get_seq").click(function(){
+        $.getJSON("js/data.json", function(data){
+          seq = data;
+          seqno = 0;
+        })
+      });
 
-      })
+      //シーケンスのon off
+      $('input[name="button_run"]' ).change( function() {
+        if( $(this).val()=='on'){
+            heartbeat(seq.heartbeat);
+
+          //timer = setInterval(syori, seq.heartbeat);
+        } else{
+            seq.heartbeat=0;
+          //clearInterval(timer);
+        }
+      });
+
+      function heartbeat(beat){
+        if (beat > 0){
+
+          //ここに処理
+          $("#note_list").text(seqno);
+
+          //例
+          rhythm();
+
+          seqno++;
+
+          //次を呼び出し
+          setTimeout(function(){
+              heartbeat(seq.heartbeat);
+          },beat);
+        }
+
+      }
+      function rhythm() {
+          //staticな変数を初期化
+          if (typeof rhythm.counter === 'undefined') {
+              rhythm.counter = 0;
+          }
+
+          if(seqno % seq.rhythm[rhythm.counter] == 0){
+            //?回に１回
+            $("#note_list2").text(seqno);
+
+            noteOut(0,62,100,500);
+
+          }else if(seqno % seq.rhythm[rhythm.counter] == seq.rhythm[rhythm.counter] - 1 ){
+
+            //次の回の直前
+            rhythm.counter++;
+            if(rhythm.counter >= seq.rhythm.length ){
+              rhythm.counter = 0;
+            }
+
+          }
+
+
+
+          //return n + rhythm.counter;
+      }
 
       $("#button1").click(function(){
-          //sendMiddleC(0);
+        //  sendMiddleC(0);
           noteOut(0,62,100,500);
           noteOut(0,67,100,1000);
       });
@@ -27,8 +88,14 @@
 </head>
 <body>
   <h1>Web midi test</h1>
-  <input id="button1" type="button" value="on">
-  <div id="note_list"></div>
 
+  <input id="button_get_seq" type="button" value="get sequence">
+
+
+<input name="button_run" type="radio" value="on" />on
+<input name="button_run" type="radio" value="off" checked="checked" />off
+
+  <div id="note_list"></div>
+<div id="note_list2"></div>
 </body>
 </html>
