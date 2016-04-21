@@ -28,3 +28,5 @@ lib/bottle.py
 CONTRIB.md
 
 appengine_config.py
+
+js/backup_data.json

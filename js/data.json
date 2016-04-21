@@ -1,5 +1,12 @@
 {
-	"heartbeat":60,
-	"rhythm":[16,8,8]
+	"heartbeat":"test",
+	"heartbeat_bk":[60,60,120],
+
+	"story":{
+
+	},
+
+
+	"rhythm":[8,8,8]
 
 }

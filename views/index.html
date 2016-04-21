@@ -10,6 +10,7 @@
   $(function() {
       var seq; //json data
       var seqno=0;
+      var seqstatus=false;
 
       //シーケンスデータ読み込み
       $("#button_get_seq").click(function(){
@@ -22,50 +23,86 @@
       //シーケンスのon off
       $('input[name="button_run"]' ).change( function() {
         if( $(this).val()=='on'){
-            heartbeat(seq.heartbeat);
+            seqstatus=true;
+            storyteller(heartbeat(seq.heartbeat));
 
           //timer = setInterval(syori, seq.heartbeat);
         } else{
-            seq.heartbeat=0;
+            seqstatus=false;
           //clearInterval(timer);
         }
       });
 
-      function heartbeat(beat){
-        if (beat > 0){
+      //ストーリーの実行
+      function storyteller(beat){
 
+        if (seqstatus){
           //ここに処理
           $("#note_list").text(seqno);
 
           //例
-          rhythm();
+          rhythm(seq.rhythm);
 
           seqno++;
 
           //次を呼び出し
           setTimeout(function(){
-              heartbeat(seq.heartbeat);
+              storyteller(heartbeat(seq.heartbeat));
           },beat);
+
         }
 
       }
-      function rhythm() {
+
+      //ハートビートの取得
+      function heartbeat(data){
+        var ret = 0.0;
+
+        //staticな変数を初期化 配列の場合のカウンタ
+        if (typeof heartbeat.counter === 'undefined') {
+            heartbeat.counter = 0;
+        }
+        //もし受けっとったdataが式かarryかで処理を変える
+        if(typeof data === 'string'){
+          //式の場合
+          //t= seqno として　計算
+
+          ret =20 * Math.sin( 2 * Math.PI * 1 * seqno /32) + 80
+          console.log("heartbeat:" + ret);
+        }else {
+          //配列の場合
+          ret = data[heartbeat.counter]
+          //console.log("heartbeat:" + ret);
+
+          heartbeat.counter++;
+          if(heartbeat.counter >= data.length ){
+            heartbeat.counter = 0;
+          }
+
+        }
+
+        return ret;
+
+      }
+
+
+      function rhythm(rhythm_pattern) {
           //staticな変数を初期化
           if (typeof rhythm.counter === 'undefined') {
               rhythm.counter = 0;
           }
 
-          if(seqno % seq.rhythm[rhythm.counter] == 0){
+          if(seqno % rhythm_pattern[rhythm.counter] == 0){
             //?回に１回
             $("#note_list2").text(seqno);
 
             noteOut(0,62,100,500);
 
-          }else if(seqno % seq.rhythm[rhythm.counter] == seq.rhythm[rhythm.counter] - 1 ){
+          }else if(seqno % rhythm_pattern[rhythm.counter] == rhythm_pattern[rhythm.counter] - 1 ){
 
             //次の回の直前
             rhythm.counter++;
-            if(rhythm.counter >= seq.rhythm.length ){
+            if(rhythm.counter >= rhythm_pattern.length ){
               rhythm.counter = 0;
             }
 
