@@ -7,11 +7,11 @@
 
 	"beat":[
 		{
-			"formula":"(masterbeat/4) * Math.sin( 2 * Math.PI * 1 * seqno /128) + masterbeat",
+			"formula":"masterbeat * 1.2",
 			"time":128
 		},
 		{
-			"formula":"160",
+			"formula":"masterbeat * 1.5",
 			"time":64
 		}
 

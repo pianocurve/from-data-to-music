@@ -59,7 +59,7 @@
       //ハートビートの取得
       function heartbeat(){
 
-        var ret = 60.0; //default beat
+        var ret = 0.0; //default beat
         var masterbeat = seq.masterbeat;
         var loop = seq.loop;
         var beat = seq.beat;
@@ -96,11 +96,12 @@
           }else{
             //それ以外は停止
               seqstatus = false;
+              heartbeat.counter = undefined;
               ret = masterbeat;
           }
 
         }
-        
+
         return ret;
 
       }
