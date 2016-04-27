@@ -65,7 +65,7 @@
         var beat = seq.beat;
 
 
-        //staticな変数を初期化 配列の場合のカウンタ
+        //staticな変数を初期化 配列のカウンタと時間制限
         if (typeof heartbeat.counter === 'undefined') {
             heartbeat.counter = 0;
             heartbeat.timer = beat[heartbeat.counter].time;
@@ -77,11 +77,14 @@
         //配列を一個一個呼び出す
         eval("ret = " + beat[heartbeat.counter].formula + ";");
         console.log("heartbeat:" + ret);
-        console.log("heartbeat.timer:" + heartbeat.timer);
+        //console.log("heartbeat.timer:" + heartbeat.timer);
+
+        //timerを一つ減らす
         heartbeat.timer--;
         //timer分ループしたら
         if(heartbeat.timer == 0 ){
 
+          //次の配列を呼び出し
           heartbeat.counter++;
           if(heartbeat.counter < beat.length ){
             //timer をセット
@@ -97,17 +100,7 @@
           }
 
         }
-
-
-/*
-
-        //ret = data[heartbeat.counter]
-
-        heartbeat.counter++;
-        if(heartbeat.counter >= beat.length ){
-          heartbeat.counter = 0;
-        }
-*/
+        
         return ret;
 
       }
