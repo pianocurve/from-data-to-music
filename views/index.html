@@ -24,7 +24,7 @@
       $('input[name="button_run"]' ).change( function() {
         if( $(this).val()=='on'){
             seqstatus=true;
-            storyteller(heartbeat(seq.heartbeat));
+            storyteller(heartbeat());
 
           //timer = setInterval(syori, seq.heartbeat);
         } else{
@@ -37,17 +37,19 @@
       function storyteller(beat){
 
         if (seqstatus){
+
           //ここに処理
           $("#note_list").text(seqno);
 
           //例
-          rhythm(seq.rhythm);
+          rhythm(beat);
 
+          //呼び出し回数をカウント
           seqno++;
 
           //次を呼び出し
           setTimeout(function(){
-              storyteller(heartbeat(seq.heartbeat));
+              storyteller(heartbeat());
           },beat);
 
         }
@@ -55,38 +57,64 @@
       }
 
       //ハートビートの取得
-      function heartbeat(data){
-        var ret = 0.0;
+      function heartbeat(){
+
+        var ret = 60.0; //default beat
+        var masterbeat = seq.masterbeat;
+        var loop = seq.loop;
+        var beat = seq.beat;
+
 
         //staticな変数を初期化 配列の場合のカウンタ
         if (typeof heartbeat.counter === 'undefined') {
             heartbeat.counter = 0;
-        }
-        //もし受けっとったdataが式かarryかで処理を変える
-        if(typeof data === 'string'){
-          //式の場合
-          //t= seqno として　計算
+            heartbeat.timer = beat[heartbeat.counter].time;
 
-          ret =20 * Math.sin( 2 * Math.PI * 1 * seqno /32) + 80
-          console.log("heartbeat:" + ret);
-        }else {
-          //配列の場合
-          ret = data[heartbeat.counter]
-          //console.log("heartbeat:" + ret);
+        }
+
+        //beatの直列処理
+
+        //配列を一個一個呼び出す
+        eval("ret = " + beat[heartbeat.counter].formula + ";");
+        console.log("heartbeat:" + ret);
+        console.log("heartbeat.timer:" + heartbeat.timer);
+        heartbeat.timer--;
+        //timer分ループしたら
+        if(heartbeat.timer == 0 ){
 
           heartbeat.counter++;
-          if(heartbeat.counter >= data.length ){
-            heartbeat.counter = 0;
+          if(heartbeat.counter < beat.length ){
+            //timer をセット
+            heartbeat.timer = beat[heartbeat.counter].time;
+          }else　if (loop){
+            //ループがonならカウンターをリセット
+              heartbeat.counter = 0;
+              heartbeat.timer = beat[heartbeat.counter].time;
+          }else{
+            //それ以外は停止
+              seqstatus = false;
+              ret = masterbeat;
           }
 
         }
 
+
+/*
+
+        //ret = data[heartbeat.counter]
+
+        heartbeat.counter++;
+        if(heartbeat.counter >= beat.length ){
+          heartbeat.counter = 0;
+        }
+*/
         return ret;
 
       }
 
 
-      function rhythm(rhythm_pattern) {
+      function rhythm() {
+        var rhythm_pattern = seq.rhythm;
           //staticな変数を初期化
           if (typeof rhythm.counter === 'undefined') {
               rhythm.counter = 0;
@@ -96,7 +124,7 @@
             //?回に１回
             $("#note_list2").text(seqno);
 
-            noteOut(0,62,100,500);
+            noteOut(0,note(),100,500);
 
           }else if(seqno % rhythm_pattern[rhythm.counter] == rhythm_pattern[rhythm.counter] - 1 ){
 
@@ -107,11 +135,31 @@
             }
 
           }
-
-
-
           //return n + rhythm.counter;
       }
+
+      //呼び出されるたびにnotenoを返す
+      function note() {
+        var ret=0;
+        var note_pattern = seq.note;
+          //staticな変数を初期化
+          if (typeof note.counter === 'undefined') {
+              note.counter = 0;
+          }
+
+          ret= note_pattern[note.counter];
+          $("#note_list3").text(ret);
+
+          //次の回の直前
+          note.counter++;
+          if(note.counter >= note_pattern.length ){
+            note.counter = 0;
+          }
+
+          return ret;
+      }
+
+
 
       $("#button1").click(function(){
         //  sendMiddleC(0);
@@ -134,5 +182,6 @@
 
   <div id="note_list"></div>
 <div id="note_list2"></div>
+<div id="note_list3"></div>
 </body>
 </html>
